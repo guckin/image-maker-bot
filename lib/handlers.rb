@@ -4,8 +4,8 @@ module Handlers
     mod.extend(self)
   end
 
- def health_check
-   { health_check: 'ok' }.to_json
- end
+  def health_check
+    { health_check: 'ok' }.to_json
+  end
 
 end
