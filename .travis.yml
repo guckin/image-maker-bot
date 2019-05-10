@@ -1,7 +1,7 @@
 language: ruby
 rvm:
-  - 2.5.3
-#deploy:
-#  provider: gae
-#  keyfile: "YOUR SERVICE ACCOUNT JSON FILE"
-#  project: "YOUR PROJECT ID"
+- 2.5.3
+before_install:
+- openssl aes-256-cbc -K $encrypted_d524091f0fc5_key -iv $encrypted_d524091f0fc5_iv
+  -in Jack-prot-41d5a177768d.json.enc -out ~\/Downloads/Jack-prot-41d5a177768d.json
+  -d
