@@ -9,3 +9,5 @@ deploy:
   provider: gae
   keyfile: "Jack-prot-41d5a177768d.json"
   project: "jack-prot"
+  on:
+    branch: release
