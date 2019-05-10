@@ -1,5 +1,8 @@
 class Server < Sinatra::Base
   include Handlers
 
-  get '/', &method(:health_check)
+  get '/' do
+    content_type :json
+    health_check
+  end
 end

@@ -5,12 +5,7 @@ module Handlers
   end
 
  def health_check
-   json
-   { health_check: 'ok' }
+   { health_check: 'ok' }.to_json
  end
-
-  def json
-    content_type :json
-  end
 
 end
