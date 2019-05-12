@@ -11,4 +11,12 @@ module Handlers
     halt 500, {message: e}.to_json
   end
 
+  def page_subscription
+    if request.body[:object] == 'page'
+      yield
+    else
+      halt 404
+    end
+  end
+
 end
