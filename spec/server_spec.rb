@@ -7,13 +7,19 @@ class Request
   end
 
   def get(route)
-    Response.new(make_request method: :get, route: route)
+    Response.new make_request method: :get, route: route
+  end
+
+  def post(route, body)
+    Response.new make_request method: :post, route: route, body: body
   end
 
   private
 
-  def make_request(method:, route:)
-    @browser.send method, route
+  def make_request(method:, route:, body: nil)
+    args = [method, route]
+    args << body if body
+    @browser.send *args
   end
 end
 
@@ -41,7 +47,7 @@ request = Request.new(server_const)
 
 describe server_const do
 
-  context 'GET /' do
+  describe 'GET /' do
 
     before :all do
       @result = request.get('/')
@@ -53,6 +59,23 @@ describe server_const do
 
     it 'responds with an ok health status' do
       expect(@result.body).to eq({ 'health_check' => 'ok'})
+    end
+  end
+
+  describe 'POST /webhook' do
+
+    before :all do
+      @result = request.post '/webhook', {
+          "object": "page",
+          "entry":
+              [
+                  {"messaging": [{"message": "TEST_MESSAGE"}]}
+              ]
+      }
+    end
+
+    it 'works' do
+      expect(@result).to be_truthy
     end
   end
 end
