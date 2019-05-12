@@ -12,11 +12,12 @@ module Handlers
   end
 
   def page_subscription
-    if request.body[:object] == 'page'
-      yield
-    else
-      halt 404
-    end
+    halt 404 unless request.body[:object] == 'page'
+  end
+
+  def handle_message_entries
+    page_subscription
+    request.body[:entry].each { |entry| yield entry }
   end
 
 end

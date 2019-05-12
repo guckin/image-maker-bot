@@ -6,6 +6,7 @@ request_class = Struct.new(:body)
 
 module TestHandlers
   include Handlers
+
   def content_type(type)
     @content_type = type
   end
@@ -27,7 +28,7 @@ describe Handlers do
     @request = request_class.new({})
   end
 
-  context '#health_check' do
+  describe '#health_check' do
 
     before :each do
       @content_type = nil
@@ -43,7 +44,7 @@ describe Handlers do
     end
   end
 
-  context '#page_subscription' do
+  describe '#page_subscription' do
 
     before :each do
       @content_type = nil
@@ -56,4 +57,14 @@ describe Handlers do
     end
   end
 
+  describe '#handle_message_entries' do
+
+    it 'yields the entries' do
+      test_data = [1,2]
+      actual_entries = []
+      @request.body[:entry] = test_data
+      handle_message_entries { |entry| actual_entries << entry }
+      expect(actual_entries).to eq test_data
+    end
+  end
 end
