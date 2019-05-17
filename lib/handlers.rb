@@ -11,13 +11,24 @@ module Handlers
     halt 500, {message: e}.to_json
   end
 
-  def page_subscription
-    halt 404 unless request.body[:object] == 'page'
+  def page_subscription(parsed_body)
+    halt 404 unless parsed_body[:object] == 'page'
   end
 
   def handle_message_entries
-    page_subscription
-    request.body[:entry].each { |entry| yield entry }
+    parsed_body = json request.body.read
+    page_subscription parsed_body
+    parsed_body[:entry].each { |entry| yield entry }
+  end
+
+  def json(json)
+    hash = JSON.parse(json)
+    hash.keys
+        .map(&:to_sym)
+        .zip(hash.values)
+        .to_h
+  rescue => error
+    halt 400, {message: error}.to_json
   end
 
 end

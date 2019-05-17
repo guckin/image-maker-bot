@@ -5,8 +5,7 @@ class Server < Sinatra::Base
   end
 
   post '/webhook' do
-    handle_message_entries do |entry|
-      logger.info entry
-    end
+    handle_message_entries { |entry| logger.warn entry.to_s }
+    200
   end
 end

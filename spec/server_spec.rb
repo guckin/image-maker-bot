@@ -10,16 +10,20 @@ class Request
     Response.new make_request method: :get, route: route
   end
 
-  def post(route, body)
-    Response.new make_request method: :post, route: route, body: body
+  def post(route, body, headers = nil)
+    Response.new make_request method: :post,
+                              route: route,
+                              body: body,
+                              headers: headers
   end
 
   private
 
-  def make_request(method:, route:, body: nil)
-    args = [method, route]
-    args << body if body
-    @browser.send *args
+  def make_request(method:, route:, body: nil, headers: nil)
+    arguments = [method, route]
+    arguments << body if body
+    arguments << headers if headers
+    @browser.send *arguments
   end
 end
 
@@ -65,17 +69,19 @@ describe server_const do
   describe 'POST /webhook' do
 
     before :all do
-      @result = request.post '/webhook', {
+      body = {
           "object": "page",
           "entry":
               [
                   {"messaging": [{"message": "TEST_MESSAGE"}]}
               ]
-      }
+      }.to_json
+      @result = request.post '/webhook', body
     end
 
-    it 'works' do
-      expect(@result).to be_truthy
+    it 'responds with a 200 when the request was successful' do
+
+      expect(@result.status).to eq(200)
     end
   end
 end

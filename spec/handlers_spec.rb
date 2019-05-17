@@ -1,8 +1,9 @@
-request_class = Struct.new(:body)
+TestRequestClass = Struct.new(:body)
+TestBodyClass = Struct.new(:read)
 @content_type = nil
 @status = nil
 @message = nil
-@request = request_class.new({})
+@request = nil
 
 module TestHandlers
   include Handlers
@@ -19,13 +20,19 @@ module TestHandlers
   def request
     @request
   end
+
+  def body(hash)
+    response_body = TestBodyClass.new(hash.to_json)
+    @request = TestRequestClass.new(response_body)
+  end
+
 end
 
 describe Handlers do
   include TestHandlers
 
   before :each do
-    @request = request_class.new({})
+    body foo: :bar
   end
 
   describe '#health_check' do
@@ -46,13 +53,8 @@ describe Handlers do
 
   describe '#page_subscription' do
 
-    before :each do
-      @content_type = nil
-    end
-
     it 'halts 404 if the event was not from a page subscription' do
-      @request.body = {}
-      page_subscription
+      page_subscription({})
       expect(@status).to eq 404
     end
   end
@@ -62,7 +64,7 @@ describe Handlers do
     it 'yields the entries' do
       test_data = [1,2]
       actual_entries = []
-      @request.body[:entry] = test_data
+      body entry: test_data
       handle_message_entries { |entry| actual_entries << entry }
       expect(actual_entries).to eq test_data
     end
