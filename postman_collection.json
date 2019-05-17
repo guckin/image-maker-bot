@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "30bccb48-d0e7-4da6-b1c2-935dfba8c735",
+		"name": "Facebook WebHook",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST /webhook",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"object\":\"page\",\"entry\": [{\"messaging\": [{\"message\":\"TEST_MESSAGE\"}]}]}"
+				},
+				"url": {
+					"raw": "https://jack-prot.appspot.com/webhook",
+					"protocol": "https",
+					"host": [
+						"jack-prot",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"webhook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /webhook",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://jack-prot.appspot.com/webhook?hub.verify_token=bringo&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe",
+					"protocol": "https",
+					"host": [
+						"jack-prot",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"webhook"
+					],
+					"query": [
+						{
+							"key": "hub.verify_token",
+							"value": "wrongvalue"
+						},
+						{
+							"key": "hub.challenge",
+							"value": "CHALLENGE_ACCEPTED"
+						},
+						{
+							"key": "hub.mode",
+							"value": "subscribe"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://jack-prot.appspot.com/",
+					"protocol": "https",
+					"host": [
+						"jack-prot",
+						"appspot",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
